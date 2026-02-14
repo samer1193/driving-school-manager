@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -21,7 +22,6 @@ const teacherLinks = [
   { href: '/teacher', label: 'Dashboard', icon: '📊' },
   { href: '/teacher/students', label: 'My Students', icon: '🎓' },
   { href: '/teacher/schedule', label: 'Schedule', icon: '📅' },
-  { href: '/teacher/classes', label: 'Classes', icon: '🚗' },
 ];
 
 const studentLinks = [
@@ -34,6 +34,7 @@ const studentLinks = [
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, company, logout } = useAuth();
+  const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;
 
@@ -52,59 +53,112 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="w-64 bg-slate-900 min-h-screen flex flex-col">
-      {/* Company/App Header */}
-      <div className={`p-6 bg-gradient-to-r ${roleColors[user.role]}`}>
-        <h1 className="text-xl font-bold text-white">
-          {company?.name || 'Driving Schools'}
-        </h1>
-        <p className="text-sm text-white/80 capitalize mt-1">
-          {user.role} Portal
-        </p>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex-1 p-4">
-        <ul className="space-y-2">
-          {links.map((link) => {
-            const isActive = pathname === link.href;
-            return (
-              <li key={link.href}>
-                <Link
-                  href={link.href}
-                  className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                    isActive
-                      ? 'bg-white/10 text-white'
-                      : 'text-slate-400 hover:bg-white/5 hover:text-white'
-                  }`}
-                >
-                  <span className="text-xl">{link.icon}</span>
-                  <span>{link.label}</span>
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-
-      {/* User Info & Logout */}
-      <div className="p-4 border-t border-slate-700">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-medium">
+    <>
+      {/* Mobile Header */}
+      <header className="lg:hidden fixed top-0 left-0 right-0 z-50 bg-slate-900 border-b border-slate-700">
+        <div className="flex items-center justify-between px-4 py-3">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="p-2 text-white hover:bg-slate-800 rounded-lg"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+          <div className="text-center">
+            <h1 className="text-white font-semibold text-sm">
+              {company?.name || 'Driving Schools'}
+            </h1>
+            <p className="text-slate-400 text-xs capitalize">{user.role}</p>
+          </div>
+          <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white text-sm font-medium">
             {user.name.split(' ').map(n => n[0]).join('')}
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-white truncate">{user.name}</p>
-            <p className="text-xs text-slate-400 truncate">{user.email}</p>
-          </div>
         </div>
+      </header>
+
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="lg:hidden fixed inset-0 bg-black/50 z-50"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside className={`
+        fixed lg:static inset-y-0 left-0 z-50
+        w-64 bg-slate-900 min-h-screen flex flex-col
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}>
+        {/* Close button (mobile) */}
         <button
-          onClick={logout}
-          className="w-full px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+          onClick={() => setIsOpen(false)}
+          className="lg:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-white"
         >
-          ← Switch Role / Logout
+          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
         </button>
-      </div>
-    </aside>
+
+        {/* Company/App Header */}
+        <div className={`p-6 bg-gradient-to-r ${roleColors[user.role]}`}>
+          <h1 className="text-xl font-bold text-white">
+            {company?.name || 'Driving Schools'}
+          </h1>
+          <p className="text-sm text-white/80 capitalize mt-1">
+            {user.role} Portal
+          </p>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex-1 p-4 overflow-y-auto">
+          <ul className="space-y-2">
+            {links.map((link) => {
+              const isActive = pathname === link.href;
+              return (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
+                      isActive
+                        ? 'bg-white/10 text-white'
+                        : 'text-slate-400 hover:bg-white/5 hover:text-white'
+                    }`}
+                  >
+                    <span className="text-xl">{link.icon}</span>
+                    <span>{link.label}</span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        {/* User Info & Logout */}
+        <div className="p-4 border-t border-slate-700">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white font-medium">
+              {user.name.split(' ').map(n => n[0]).join('')}
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 truncate">{user.email}</p>
+            </div>
+          </div>
+          <button
+            onClick={() => {
+              setIsOpen(false);
+              logout();
+            }}
+            className="w-full px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+          >
+            ← Switch Role / Logout
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }

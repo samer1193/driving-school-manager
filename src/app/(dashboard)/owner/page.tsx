@@ -8,10 +8,10 @@ export default function OwnerDashboard() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-slate-800 mb-8">Owner Dashboard</h1>
+      <h1 className="text-2xl lg:text-3xl font-bold text-slate-800 mb-6 lg:mb-8">Owner Dashboard</h1>
       
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-6 lg:mb-8">
         <StatCard
           icon="🏢"
           label="Companies"
@@ -39,7 +39,7 @@ export default function OwnerDashboard() {
       </div>
 
       {/* Companies Overview */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
         <div className="p-6 border-b border-slate-200">
           <h2 className="text-xl font-semibold text-slate-800">Companies Overview</h2>
         </div>
@@ -113,12 +113,12 @@ function StatCard({ icon, label, value, color }: {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors[color]} flex items-center justify-center text-2xl mb-4`}>
+    <div className="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-200 p-4 lg:p-6">
+      <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-gradient-to-br ${colors[color]} flex items-center justify-center text-xl lg:text-2xl mb-3 lg:mb-4`}>
         {icon}
       </div>
-      <p className="text-sm text-slate-500 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-slate-800">{value}</p>
+      <p className="text-xs lg:text-sm text-slate-500 mb-1">{label}</p>
+      <p className="text-xl lg:text-2xl font-bold text-slate-800">{value}</p>
     </div>
   );
 }

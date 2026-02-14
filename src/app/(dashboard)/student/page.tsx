@@ -37,25 +37,23 @@ export default function StudentDashboard() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-slate-800">
-            {statusMessages[student.progressStatus].emoji} {statusMessages[student.progressStatus].text}
-          </h1>
-          <p className="text-slate-500 mt-1">Welcome back, {student.name.split(' ')[0]}</p>
-        </div>
+      <div className="mb-6 lg:mb-8">
+        <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-slate-800">
+          {statusMessages[student.progressStatus].emoji} {statusMessages[student.progressStatus].text}
+        </h1>
+        <p className="text-slate-500 mt-1">Welcome back, {student.name.split(' ')[0]}</p>
       </div>
 
       {/* Progress Card */}
-      <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-2xl p-6 text-white mb-8">
+      <div className="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-xl lg:rounded-2xl p-4 lg:p-6 text-white mb-6 lg:mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <p className="text-blue-100 text-sm">Your Progress</p>
-            <p className="text-4xl font-bold">{progressPercent}%</p>
+            <p className="text-blue-100 text-xs lg:text-sm">Your Progress</p>
+            <p className="text-3xl lg:text-4xl font-bold">{progressPercent}%</p>
           </div>
           <div className="text-right">
-            <p className="text-blue-100 text-sm">Classes</p>
-            <p className="text-2xl font-bold">{student.totalClassesCompleted} / {student.totalClassesScheduled}</p>
+            <p className="text-blue-100 text-xs lg:text-sm">Classes</p>
+            <p className="text-xl lg:text-2xl font-bold">{student.totalClassesCompleted} / {student.totalClassesScheduled}</p>
           </div>
         </div>
         <div className="h-3 bg-white/20 rounded-full overflow-hidden">
@@ -73,7 +71,7 @@ export default function StudentDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6 mb-6 lg:mb-8">
         <StatCard
           icon="📅"
           label="Upcoming Classes"
@@ -100,9 +98,9 @@ export default function StudentDashboard() {
         />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
         {/* Upcoming Classes */}
-        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-800">Upcoming Classes</h2>
             <Link href="/student/schedule" className="text-sm text-blue-600 hover:text-blue-700">
@@ -229,12 +227,12 @@ function StatCard({ icon, label, value, color }: {
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-      <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${colors[color]} flex items-center justify-center text-2xl mb-4`}>
+    <div className="bg-white rounded-xl lg:rounded-2xl shadow-sm border border-slate-200 p-4 lg:p-6">
+      <div className={`w-10 h-10 lg:w-12 lg:h-12 rounded-lg lg:rounded-xl bg-gradient-to-br ${colors[color]} flex items-center justify-center text-xl lg:text-2xl mb-3 lg:mb-4`}>
         {icon}
       </div>
-      <p className="text-sm text-slate-500 mb-1">{label}</p>
-      <p className="text-2xl font-bold text-slate-800">{value}</p>
+      <p className="text-xs lg:text-sm text-slate-500 mb-1">{label}</p>
+      <p className="text-xl lg:text-2xl font-bold text-slate-800">{value}</p>
     </div>
   );
 }

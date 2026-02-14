@@ -23,24 +23,24 @@ export default function LoginPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full">
         {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-5xl font-bold text-white mb-4">
+        <div className="text-center mb-8 lg:mb-12">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
             🚗 Driving School Manager
           </h1>
-          <p className="text-slate-400 text-lg">
+          <p className="text-slate-400 text-base lg:text-lg">
             White-label multi-company driving school management system
           </p>
-          <p className="text-slate-500 mt-2">
+          <p className="text-slate-500 mt-2 text-sm lg:text-base">
             Demo Mode — Select a role to explore
           </p>
         </div>
 
         {/* Company Selector */}
-        <div className="bg-slate-800/50 rounded-2xl p-6 mb-8 backdrop-blur">
+        <div className="bg-slate-800/50 rounded-xl lg:rounded-2xl p-4 lg:p-6 mb-6 lg:mb-8 backdrop-blur">
           <label className="block text-sm font-medium text-slate-300 mb-3">
             Select Company
           </label>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 lg:gap-4">
             {companies.map((company) => (
               <button
                 key={company.id}
@@ -66,18 +66,18 @@ export default function LoginPage() {
         </div>
 
         {/* Role Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-6">
           {/* Owner */}
           <button
             onClick={() => handleLogin('owner')}
-            className="group bg-gradient-to-br from-purple-600 to-indigo-600 p-6 rounded-2xl text-left hover:scale-105 transition-transform"
+            className="group bg-gradient-to-br from-purple-600 to-indigo-600 p-4 lg:p-6 rounded-xl lg:rounded-2xl text-left hover:scale-105 transition-transform"
           >
-            <div className="text-4xl mb-4">👑</div>
-            <h2 className="text-xl font-bold text-white mb-2">Owner</h2>
-            <p className="text-purple-100 text-sm">
-              Manage all companies, view global analytics
+            <div className="text-3xl lg:text-4xl mb-2 lg:mb-4">👑</div>
+            <h2 className="text-lg lg:text-xl font-bold text-white mb-1 lg:mb-2">Owner</h2>
+            <p className="text-purple-100 text-xs lg:text-sm hidden sm:block">
+              Manage all companies
             </p>
-            <div className="mt-4 text-purple-200 text-xs">
+            <div className="mt-2 lg:mt-4 text-purple-200 text-xs">
               {companies.length} companies
             </div>
           </button>
@@ -85,29 +85,29 @@ export default function LoginPage() {
           {/* Manager */}
           <button
             onClick={() => handleLogin('manager')}
-            className="group bg-gradient-to-br from-blue-600 to-cyan-600 p-6 rounded-2xl text-left hover:scale-105 transition-transform"
+            className="group bg-gradient-to-br from-blue-600 to-cyan-600 p-4 lg:p-6 rounded-xl lg:rounded-2xl text-left hover:scale-105 transition-transform"
           >
-            <div className="text-4xl mb-4">💼</div>
-            <h2 className="text-xl font-bold text-white mb-2">Manager</h2>
-            <p className="text-blue-100 text-sm">
+            <div className="text-3xl lg:text-4xl mb-2 lg:mb-4">💼</div>
+            <h2 className="text-lg lg:text-xl font-bold text-white mb-1 lg:mb-2">Manager</h2>
+            <p className="text-blue-100 text-xs lg:text-sm hidden sm:block">
               {companyManager?.name || 'Company manager'}
             </p>
-            <div className="mt-4 text-blue-200 text-xs">
-              {companyTeachers.length} teachers • {companyStudents.length} students
+            <div className="mt-2 lg:mt-4 text-blue-200 text-xs">
+              {companyTeachers.length} teachers
             </div>
           </button>
 
           {/* Teacher */}
           <button
             onClick={() => handleLogin('teacher')}
-            className="group bg-gradient-to-br from-green-600 to-emerald-600 p-6 rounded-2xl text-left hover:scale-105 transition-transform"
+            className="group bg-gradient-to-br from-green-600 to-emerald-600 p-4 lg:p-6 rounded-xl lg:rounded-2xl text-left hover:scale-105 transition-transform"
           >
-            <div className="text-4xl mb-4">👨‍🏫</div>
-            <h2 className="text-xl font-bold text-white mb-2">Teacher</h2>
-            <p className="text-green-100 text-sm">
+            <div className="text-3xl lg:text-4xl mb-2 lg:mb-4">👨‍🏫</div>
+            <h2 className="text-lg lg:text-xl font-bold text-white mb-1 lg:mb-2">Teacher</h2>
+            <p className="text-green-100 text-xs lg:text-sm hidden sm:block">
               {companyTeachers[0]?.name || 'Instructor'}
             </p>
-            <div className="mt-4 text-green-200 text-xs">
+            <div className="mt-2 lg:mt-4 text-green-200 text-xs">
               {students.filter(s => s.teacherId === companyTeachers[0]?.id).length} students
             </div>
           </button>
@@ -115,21 +115,21 @@ export default function LoginPage() {
           {/* Student */}
           <button
             onClick={() => handleLogin('student')}
-            className="group bg-gradient-to-br from-orange-500 to-amber-500 p-6 rounded-2xl text-left hover:scale-105 transition-transform"
+            className="group bg-gradient-to-br from-orange-500 to-amber-500 p-4 lg:p-6 rounded-xl lg:rounded-2xl text-left hover:scale-105 transition-transform"
           >
-            <div className="text-4xl mb-4">🎓</div>
-            <h2 className="text-xl font-bold text-white mb-2">Student</h2>
-            <p className="text-orange-100 text-sm">
+            <div className="text-3xl lg:text-4xl mb-2 lg:mb-4">🎓</div>
+            <h2 className="text-lg lg:text-xl font-bold text-white mb-1 lg:mb-2">Student</h2>
+            <p className="text-orange-100 text-xs lg:text-sm hidden sm:block">
               {companyStudents[0]?.name || 'Learner'}
             </p>
-            <div className="mt-4 text-orange-200 text-xs">
-              View schedule & progress
+            <div className="mt-2 lg:mt-4 text-orange-200 text-xs">
+              View progress
             </div>
           </button>
         </div>
 
         {/* Features */}
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+        <div className="mt-8 lg:mt-12 hidden sm:grid grid-cols-4 gap-4 text-center">
           {[
             { icon: '🏢', label: 'Multi-Company' },
             { icon: '👥', label: 'Role-Based Access' },
