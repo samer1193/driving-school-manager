@@ -4,39 +4,42 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-
-const ownerLinks = [
-  { href: '/owner', label: 'Dashboard', icon: '📊' },
-  { href: '/owner/companies', label: 'Companies', icon: '🏢' },
-];
-
-const managerLinks = [
-  { href: '/manager', label: 'Dashboard', icon: '📊' },
-  { href: '/manager/teachers', label: 'Teachers', icon: '👨‍🏫' },
-  { href: '/manager/students', label: 'Students', icon: '🎓' },
-  { href: '/manager/schedule', label: 'Schedule', icon: '📅' },
-  { href: '/manager/payments', label: 'Payments', icon: '💰' },
-];
-
-const teacherLinks = [
-  { href: '/teacher', label: 'Dashboard', icon: '📊' },
-  { href: '/teacher/students', label: 'My Students', icon: '🎓' },
-  { href: '/teacher/schedule', label: 'Schedule', icon: '📅' },
-];
-
-const studentLinks = [
-  { href: '/student', label: 'Dashboard', icon: '📊' },
-  { href: '/student/schedule', label: 'My Schedule', icon: '📅' },
-  { href: '/student/progress', label: 'Progress', icon: '📈' },
-  { href: '/student/payments', label: 'Payments', icon: '💰' },
-];
+import { useLanguage } from '@/context/LanguageContext';
+import LanguageToggle from './LanguageToggle';
 
 export default function Sidebar() {
   const pathname = usePathname();
   const { user, company, logout } = useAuth();
+  const { t, isRTL } = useLanguage();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;
+
+  const ownerLinks = [
+    { href: '/owner', label: t('common.dashboard'), icon: '📊' },
+    { href: '/owner/companies', label: t('common.companies'), icon: '🏢' },
+  ];
+
+  const managerLinks = [
+    { href: '/manager', label: t('common.dashboard'), icon: '📊' },
+    { href: '/manager/teachers', label: t('common.teachers'), icon: '👨‍🏫' },
+    { href: '/manager/students', label: t('common.students'), icon: '🎓' },
+    { href: '/manager/schedule', label: t('common.schedule'), icon: '📅' },
+    { href: '/manager/payments', label: t('common.payments'), icon: '💰' },
+  ];
+
+  const teacherLinks = [
+    { href: '/teacher', label: t('common.dashboard'), icon: '📊' },
+    { href: '/teacher/students', label: t('common.myStudents'), icon: '🎓' },
+    { href: '/teacher/schedule', label: t('common.schedule'), icon: '📅' },
+  ];
+
+  const studentLinks = [
+    { href: '/student', label: t('common.dashboard'), icon: '📊' },
+    { href: '/student/schedule', label: t('common.mySchedule'), icon: '📅' },
+    { href: '/student/progress', label: t('common.progress'), icon: '📈' },
+    { href: '/student/payments', label: t('common.payments'), icon: '💰' },
+  ];
 
   const links = {
     owner: ownerLinks,
@@ -50,6 +53,13 @@ export default function Sidebar() {
     manager: 'from-blue-600 to-cyan-600',
     teacher: 'from-green-600 to-emerald-600',
     student: 'from-orange-500 to-amber-500',
+  };
+
+  const portalNames = {
+    owner: t('role.ownerPortal'),
+    manager: t('role.managerPortal'),
+    teacher: t('role.teacherPortal'),
+    student: t('role.studentPortal'),
   };
 
   return (
@@ -67,13 +77,11 @@ export default function Sidebar() {
           </button>
           <div className="text-center">
             <h1 className="text-white font-semibold text-sm">
-              {company?.name || 'Driving Schools'}
+              {company?.name || t('app.name')}
             </h1>
-            <p className="text-slate-400 text-xs capitalize">{user.role}</p>
+            <p className="text-slate-400 text-xs">{portalNames[user.role]}</p>
           </div>
-          <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-white text-sm font-medium">
-            {user.name.split(' ').map(n => n[0]).join('')}
-          </div>
+          <LanguageToggle variant="compact" />
         </div>
       </header>
 
@@ -87,15 +95,16 @@ export default function Sidebar() {
 
       {/* Sidebar */}
       <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50
+        fixed lg:static inset-y-0 z-50
         w-64 bg-slate-900 min-h-screen flex flex-col
         transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        ${isRTL ? 'right-0' : 'left-0'}
+        ${isOpen ? 'translate-x-0' : isRTL ? 'translate-x-full lg:translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Close button (mobile) */}
         <button
           onClick={() => setIsOpen(false)}
-          className="lg:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-white"
+          className={`lg:hidden absolute top-4 ${isRTL ? 'left-4' : 'right-4'} p-2 text-slate-400 hover:text-white`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -105,11 +114,16 @@ export default function Sidebar() {
         {/* Company/App Header */}
         <div className={`p-6 bg-gradient-to-r ${roleColors[user.role]}`}>
           <h1 className="text-xl font-bold text-white">
-            {company?.name || 'Driving Schools'}
+            {company?.name || t('app.name')}
           </h1>
-          <p className="text-sm text-white/80 capitalize mt-1">
-            {user.role} Portal
+          <p className="text-sm text-white/80 mt-1">
+            {portalNames[user.role]}
           </p>
+        </div>
+
+        {/* Language Toggle (Desktop) */}
+        <div className="hidden lg:block p-4 border-b border-slate-700">
+          <LanguageToggle />
         </div>
 
         {/* Navigation */}
@@ -155,7 +169,7 @@ export default function Sidebar() {
             }}
             className="w-full px-4 py-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
           >
-            ← Switch Role / Logout
+            {t('common.switchRole')}
           </button>
         </div>
       </aside>
